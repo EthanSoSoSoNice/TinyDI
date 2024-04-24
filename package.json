@@ -1,0 +1,14 @@
+{
+	"name": "tinydi",
+	"version": "1.0.0",
+	"types": "dist/index.d.ts",
+	"dependencies": {
+		"assert": "^2.1.0",
+		"reflect-metadata": "^0.2.2"
+	},
+	"devDependencies": {
+		"@types/assert": "^1.5.10",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.4.5"
+	}
+}
