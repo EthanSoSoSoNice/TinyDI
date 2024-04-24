@@ -2,6 +2,7 @@
 	"name": "tinydi",
 	"version": "1.0.0",
 	"types": "dist/index.d.ts",
+	"main": "dist/index.js",
 	"dependencies": {
 		"assert": "^2.1.0",
 		"reflect-metadata": "^0.2.2"
