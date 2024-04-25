@@ -68,6 +68,9 @@ class Container {
     set(id, value) {
         this._instances.set(id, value);
     }
+    get(id) {
+        return this._instances.get(id);
+    }
 }
 exports.Container = Container;
 //# sourceMappingURL=container.js.map

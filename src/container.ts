@@ -71,4 +71,8 @@ export class Container {
   set(id: string, value: any) {
     this._instances.set(id, value)
   }
+
+  get(id: string) {
+    return this._instances.get(id)
+  }
 }

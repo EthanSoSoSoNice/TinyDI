@@ -19,5 +19,6 @@ export declare class Container {
         new (...args: any): any;
     }>(target: T): Promise<InstanceType<T>>;
     set(id: string, value: any): void;
+    get(id: string): any;
 }
 //# sourceMappingURL=container.d.ts.map
