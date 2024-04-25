@@ -1,3 +1,4 @@
+export type OnInstanceCreatedListener = (id: string, instance: any) => Promise<void>;
 export declare class Container {
     private _instances;
     private _onInstanceCreated?;
@@ -6,7 +7,7 @@ export declare class Container {
      * 实例创建之后执行，可用于初始化实例
      * @param listener
      */
-    onInstanceCreated(listener: typeof this._onInstanceCreated): void;
+    onInstanceCreated(listener: OnInstanceCreatedListener): void;
     /**
      * TODO:
      *  1. 检查循环依赖

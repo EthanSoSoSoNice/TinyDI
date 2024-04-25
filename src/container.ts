@@ -1,10 +1,15 @@
 import { INJECTABLE_KEY, PROPERTIES_KEY, Property } from "./inject"
 import assert from "assert"
 
+export type OnInstanceCreatedListener = (
+  id: string,
+  instance: any
+) => Promise<void>
+
 export class Container {
   private _instances: Map<string, any>
 
-  private _onInstanceCreated?: (id: string, instance: any) => Promise<void>
+  private _onInstanceCreated?: OnInstanceCreatedListener
 
   constructor() {
     this._instances = new Map()
@@ -14,7 +19,7 @@ export class Container {
    * 实例创建之后执行，可用于初始化实例
    * @param listener
    */
-  onInstanceCreated(listener: typeof this._onInstanceCreated) {
+  onInstanceCreated(listener: OnInstanceCreatedListener) {
     this._onInstanceCreated = listener
   }
 
