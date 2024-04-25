@@ -19,20 +19,30 @@ class Container {
     constructor() {
         this._instances = new Map();
     }
+    /**
+     * 实例创建之后执行，可用于初始化实例
+     * @param listener
+     */
+    onInstanceCreated(listener) {
+        this._onInstanceCreated = listener;
+    }
+    /**
+     * TODO:
+     *  1. 检查循环依赖
+     *  2. 生成依赖关系图
+     * @param target
+     * @returns
+     */
     resolve(target) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
+            var _a, _b, _c;
             const id = Reflect.getMetadata(inject_1.INJECTABLE_KEY, target);
             (0, assert_1.default)(id);
             do {
                 if (this._instances.has(id))
                     break;
-                const params = Reflect.getMetadata("design:paramtypes", target);
-                if (params == undefined) {
-                    this._instances.set(id, new target());
-                    break;
-                }
-                const properties = (_a = Reflect.getOwnMetadata(inject_1.PROPERTIES_KEY, target)) !== null && _a !== void 0 ? _a : [];
+                const params = (_a = Reflect.getMetadata("design:paramtypes", target)) !== null && _a !== void 0 ? _a : [];
+                const properties = (_b = Reflect.getOwnMetadata(inject_1.PROPERTIES_KEY, target)) !== null && _b !== void 0 ? _b : [];
                 const deps = [];
                 for (let i = 0; i < params.length; i++) {
                     const dep = params[i];
@@ -48,7 +58,9 @@ class Container {
                     else
                         deps.push(property.default);
                 }
-                this._instances.set(id, new target(...deps));
+                const instance = new target(...deps);
+                yield ((_c = this._onInstanceCreated) === null || _c === void 0 ? void 0 : _c.call(this, id, instance));
+                this._instances.set(id, instance);
             } while (false);
             return this._instances.get(id);
         });
