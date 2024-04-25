@@ -30,6 +30,12 @@ async function test() {
     host: "http://baidu.com",
     port: 8080,
   })
+  container.onInstanceCreated(async (id, instance) => {
+    console.log(`instance created ${id}, ${instance}`)
+    return new Promise((resolve) => {
+      setTimeout(resolve, 3000)
+    })
+  })
   const myService = await container.resolve(MyService)
   myService.test()
 }
