@@ -16,7 +16,8 @@ exports.Container = void 0;
 const inject_1 = require("./inject");
 const assert_1 = __importDefault(require("assert"));
 class Container {
-    constructor() {
+    constructor(_debug) {
+        this._debug = _debug;
         this._instances = new Map();
     }
     /**
@@ -37,12 +38,14 @@ class Container {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c;
             const id = Reflect.getMetadata(inject_1.INJECTABLE_KEY, target);
+            this._log(`reslove target:${target.name} id:${id}`);
             (0, assert_1.default)(id);
             do {
                 if (this._instances.has(id))
                     break;
                 const params = (_a = Reflect.getMetadata("design:paramtypes", target)) !== null && _a !== void 0 ? _a : [];
                 const properties = (_b = Reflect.getOwnMetadata(inject_1.PROPERTIES_KEY, target)) !== null && _b !== void 0 ? _b : [];
+                this._log(`params:${JSON.stringify(params.map((m) => m.name).join(","))} properties:${JSON.stringify(properties)}`);
                 const deps = [];
                 for (let i = 0; i < params.length; i++) {
                     const dep = params[i];
@@ -70,6 +73,10 @@ class Container {
     }
     get(id) {
         return this._instances.get(id);
+    }
+    _log(message) {
+        if (this._debug)
+            console.debug(message);
     }
 }
 exports.Container = Container;

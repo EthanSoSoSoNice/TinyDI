@@ -11,7 +11,7 @@ export class Container {
 
   private _onInstanceCreated?: OnInstanceCreatedListener
 
-  constructor() {
+  constructor(private _debug?: boolean) {
     this._instances = new Map()
   }
 
@@ -34,6 +34,7 @@ export class Container {
     target: T
   ): Promise<InstanceType<T>> {
     const id = Reflect.getMetadata(INJECTABLE_KEY, target) as string
+    this._log(`reslove target:${target.name} id:${id}`)
     assert(id)
     do {
       if (this._instances.has(id)) break
@@ -44,6 +45,11 @@ export class Container {
       const properties: Property[] =
         Reflect.getOwnMetadata(PROPERTIES_KEY, target) ?? []
 
+      this._log(
+        `params:${JSON.stringify(
+          params.map((m) => m.name).join(",")
+        )} properties:${JSON.stringify(properties)}`
+      )
       const deps: any[] = []
       for (let i = 0; i < params.length; i++) {
         const dep = params[i]
@@ -74,5 +80,9 @@ export class Container {
 
   get(id: string) {
     return this._instances.get(id)
+  }
+
+  private _log(message: string) {
+    if (this._debug) console.debug(message)
   }
 }

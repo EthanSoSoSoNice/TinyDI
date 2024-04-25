@@ -8,7 +8,6 @@ export const PROPERTIES_KEY = "__PROPERTIES__"
  */
 export function Injectable(config?: InjectableConfig): ClassDecorator {
   return (target) => {
-    console.log(config ? config.id : target.name)
     Reflect.defineMetadata(
       INJECTABLE_KEY,
       config ? config.id : target.name,

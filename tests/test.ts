@@ -25,7 +25,7 @@ class MyService {
 }
 
 async function test() {
-  const container = new Container()
+  const container = new Container(true)
   container.set("Config", {
     host: "http://baidu.com",
     port: 8080,

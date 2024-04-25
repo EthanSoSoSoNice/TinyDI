@@ -1,8 +1,9 @@
 export type OnInstanceCreatedListener = (id: string, instance: any) => Promise<void>;
 export declare class Container {
+    private _debug?;
     private _instances;
     private _onInstanceCreated?;
-    constructor();
+    constructor(_debug?: boolean | undefined);
     /**
      * 实例创建之后执行，可用于初始化实例
      * @param listener
@@ -20,5 +21,6 @@ export declare class Container {
     }>(target: T): Promise<InstanceType<T>>;
     set(id: string, value: any): void;
     get(id: string): any;
+    private _log;
 }
 //# sourceMappingURL=container.d.ts.map

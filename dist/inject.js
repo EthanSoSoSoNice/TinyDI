@@ -10,7 +10,6 @@ exports.PROPERTIES_KEY = "__PROPERTIES__";
  */
 function Injectable(config) {
     return (target) => {
-        console.log(config ? config.id : target.name);
         Reflect.defineMetadata(exports.INJECTABLE_KEY, config ? config.id : target.name, target);
     };
 }
