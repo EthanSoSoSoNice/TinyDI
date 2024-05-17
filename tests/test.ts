@@ -9,10 +9,17 @@ class DepSevice {
   }
 }
 
+@Injectable({ id: "DepService2" })
+class DepSevice2 {
+  test() {
+    console.log("i'm dep service2")
+  }
+}
+
 @Injectable()
 class MyService {
   constructor(
-    private dep1: DepSevice,
+    @Property("DepService2", new DepSevice2()) private dep1: DepSevice,
     @Property("Config") private config: Config,
     @Property<Config>("Config2", { host: "www.google.com", port: 9090 })
     private config2: Config

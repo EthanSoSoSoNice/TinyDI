@@ -4,7 +4,8 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "scripts": {
-    "test": "npx ts-node tests/test.ts"
+    "test": "npx ts-node tests/test.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "assert": "^2.1.0",

@@ -45,13 +45,29 @@ export class Container {
       const properties: Property[] =
         Reflect.getOwnMetadata(PROPERTIES_KEY, target) ?? []
 
+      params.forEach((p) => {
+        if (!p) {
+          throw new Error(`invalid dependency:${p}`)
+        }
+      })
+
       this._log(
         `params:${JSON.stringify(
           params.map((m) => m.name).join(",")
         )} properties:${JSON.stringify(properties)}`
       )
+
       const deps: any[] = []
       for (let i = 0; i < params.length; i++) {
+        const property = properties.find((p) => p.index == i)
+
+        if (property) {
+          if (this._instances.has(property.id))
+            deps.push(this._instances.get(property.id))
+          else deps.push(property.default)
+          continue
+        }
+
         const dep = params[i]
         const isInjectable = Reflect.getOwnMetadata(INJECTABLE_KEY, dep)
 
@@ -59,12 +75,6 @@ export class Container {
           deps.push(await this.resolve(dep))
           continue
         }
-
-        const property = properties.find((p) => p.index == i)
-        assert(property)
-        if (this._instances.has(property.id))
-          deps.push(this._instances.get(property.id))
-        else deps.push(property.default)
       }
 
       const instance = new target(...deps)

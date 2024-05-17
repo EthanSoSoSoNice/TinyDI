@@ -45,21 +45,28 @@ class Container {
                     break;
                 const params = (_a = Reflect.getMetadata("design:paramtypes", target)) !== null && _a !== void 0 ? _a : [];
                 const properties = (_b = Reflect.getOwnMetadata(inject_1.PROPERTIES_KEY, target)) !== null && _b !== void 0 ? _b : [];
+                params.forEach((p) => {
+                    if (!p) {
+                        throw new Error(`invalid dependency:${p}`);
+                    }
+                });
                 this._log(`params:${JSON.stringify(params.map((m) => m.name).join(","))} properties:${JSON.stringify(properties)}`);
                 const deps = [];
                 for (let i = 0; i < params.length; i++) {
+                    const property = properties.find((p) => p.index == i);
+                    if (property) {
+                        if (this._instances.has(property.id))
+                            deps.push(this._instances.get(property.id));
+                        else
+                            deps.push(property.default);
+                        continue;
+                    }
                     const dep = params[i];
                     const isInjectable = Reflect.getOwnMetadata(inject_1.INJECTABLE_KEY, dep);
                     if (isInjectable) {
                         deps.push(yield this.resolve(dep));
                         continue;
                     }
-                    const property = properties.find((p) => p.index == i);
-                    (0, assert_1.default)(property);
-                    if (this._instances.has(property.id))
-                        deps.push(this._instances.get(property.id));
-                    else
-                        deps.push(property.default);
                 }
                 const instance = new target(...deps);
                 yield ((_c = this._onInstanceCreated) === null || _c === void 0 ? void 0 : _c.call(this, id, instance));
